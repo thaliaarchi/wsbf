@@ -6,48 +6,50 @@
 [ License, v. 2.0. If a copy of the MPL was not distributed with this ]
 [ file, You can obtain one at https://mozilla.org/MPL/2.0/.           ]
 
+>+>+<<
+
 Read opcode until NUL and encode it in ternary with leading 1
-Cells: *char=0 ternary=0 last_valid=0
->+>+<<,[
-  >>[-<[->+++<]>[-<+>]]+<< Triple ternary if last char valid
-                      char digit
-                ---------T     0
-                       [-L >++<2
-  [----------------------S  >-<1
-                  [[-]else   >-0 >-<<last_valid=0
+Cells: *char=0 ternary=1 mul=1
+,[
+  >>[-<[->+++<]>[-<+>]]+<< Triple ternary if the last char was a token
+                      char digit mul
+                ---------T     0   1
+                       [-L  >++2   1 <
+  [----------------------S   >-1   1 <
+                  [[-]else   >-0 >-0 <<
                        ]]]
   ,
 ]
 >>[-]<
 
 Map from ternary to opcode ID and argument type
-Cells: 0 *ternary id=0 arg_type=0
-                                  base10   id    arg    inst     toks base3
-                         -------------13  >+1   >+<1 <  push n   SS   111
-                       [--------------27  >+2   >-<0 <  retrieve TTT  1000
-                                    [-28  >+3      0 <  store    TTS  1001
-                            [---------37  >+4   >+<1 <  copy n   STS  1101
-                                    [-38  >+5      1 <  slide n  STL  1102
-                                 [----42  >+6   >-<0 <  swap     SLT  1120
-                                    [-43  >+7      0 <  dup      SLS  1121
-                                    [-44  >+8      0 <  drop     SLL  1122
-                                    [-45  >+9  >++<2 <  jn l     LTT  1200
-                                    [-46  >+10     2 <  jz l     LTS  1201
-                                    [-47  >+11 >--<0 <  ret      LTL  1202
-                                    [-48  >+12 >++<2 <  call l   LST  1210
-                                    [-49  >+13     2 <  label l  LSS  1211
-                                    [-50  >+14     2 <  jmp l    LSL  1212
-                                  [---53  >+15 >--<0 <  end      LLL  1222
-[-------------------------------------90  >+16     0 <  mod      TSTT 10100
-                                    [-91  >+17     0 <  div      TSTS 10101
-                                   [--93  >+18     0 <  sub      TSST 10110
-                                    [-94  >+19     0 <  add      TSSS 10111
-                                    [-95  >+20     0 <  mul      TSSL 10112
-                                 [----99  >+21     0 <  readi    TLTT 10200
-                                    [-100 >+22     0 <  readc    TLTS 10201
-                                   [--102 >+23     0 <  printi   TLST 10210
-                                    [-103 >+24     0 <  printc   TLSS 10211
-                                 [[-]else >[-]0    0 <  invalid
+Cells: 0 *ternary opcode=0 type=0
+                                  base10   id  type     inst     toks base3
+                         -------------13  >+1   >+1 <<  push n   SS   111
+                       [--------------27  >+2   >-0 <<  retrieve TTT  1000
+                                    [-28  >+3     0 <   store    TTS  1001
+                            [---------37  >+4   >+1 <<  copy n   STS  1101
+                                    [-38  >+5     1 <   slide n  STL  1102
+                                 [----42  >+6   >-0 <<  swap     SLT  1120
+                                    [-43  >+7     0 <   dup      SLS  1121
+                                    [-44  >+8     0 <   drop     SLL  1122
+                                    [-45  >+9  >++2 <<  jn l     LTT  1200
+                                    [-46  >+10    2 <   jz l     LTS  1201
+                                    [-47  >+11 >--0 <<  ret      LTL  1202
+                                    [-48  >+12 >++2 <<  call l   LST  1210
+                                    [-49  >+13    2 <   label l  LSS  1211
+                                    [-50  >+14    2 <   jmp l    LSL  1212
+                                  [---53  >+15 >--0 <<  end      LLL  1222
+[-------------------------------------90  >+16    0 <   mod      TSTT 10100
+                                    [-91  >+17    0 <   div      TSTS 10101
+                                   [--93  >+18    0 <   sub      TSST 10110
+                                    [-94  >+19    0 <   add      TSSS 10111
+                                    [-95  >+20    0 <   mul      TSSL 10112
+                                 [----99  >+21    0 <   readi    TLTT 10200
+                                    [-100 >+22    0 <   readc    TLTS 10201
+                                   [--102 >+23    0 <   printi   TLST 10210
+                                    [-103 >+24    0 <   printc   TLSS 10211
+                                 [[-]else >[-]0   0 <   invalid
                  ]]]]]]]]]]]]]]]]]]]]]]]]
 
 >.>.
