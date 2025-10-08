@@ -6,24 +6,24 @@
 [ License, v. 2.0. If a copy of the MPL was not distributed with this ]
 [ file, You can obtain one at https://mozilla.org/MPL/2.0/.           ]
 
->+>+<<
+>>+<<
 
 Read opcode until NUL and encode it in ternary with leading 1
-Cells: *char=0 ternary=1 mul=1
+Cells: *char=0 digit=0 ternary=1
 ,[
-  >>[-<[->+++<]>[-<+>]]+<< Triple ternary if the last char was a token
-                      char digit mul
-                ---------T     0   1
-                       [-L  >++2   1 <
-  [----------------------S   >-1   1 <
-                  [[-]else   >-0 >-0 <<
+                      char digit
+                ---------T     0
+                       [-L  >++2 <
+  [----------------------S   >-1 <
+                  [[-]else  >--c <
                        ]]]
+  >+[->[-<+++>]<[->+<]]< If not a comment: triple ternary and add digit
   ,
 ]
->>[-]<
+>>
 
 Map from ternary to opcode ID and argument type
-Cells: 0 *ternary opcode=0 type=0
+Cells: 0 0 *ternary opcode=0 type=0
                                   base10   id  type     inst     toks base3
                          -------------13  >+1   >+1 <<  push n   SS   111
                        [--------------27  >+2   >-0 <<  retrieve TTT  1000
@@ -54,23 +54,23 @@ Cells: 0 *ternary opcode=0 type=0
 >>>>
 
 Read unsigned argument until LF
-Cells: 0 0 opcode type char=0 *continue=0 arg=0 mul=0
+Cells: 0 0 0 opcode type char=0 *continue=0 bit=0 arg=0
 +[-
   <,
-                       char cont arg mul
-                        EOF    0   0   0
-               [----------L    0   0   0
-                        [
-  >>>[-<[->++<]>[-<+>]]<<< Double arg if the last char was a token
-                         +T  >+1 >+1 >+1 <<<
-  [-----------------------S   >1 >-0   1 <<
-                   [[-]else   >1  >0 >-0 <<<
-                       ]]]]
+                       char cont bit
+                        EOF    0
+               [----------L    0
+                        [+T  >+1 >+1 <<
+  [-----------------------S   >1 >-0 <<
+                   [[-]else   >1 >-c <<
+                         ]]
+  >>+[->[-<++>]<[->+<]]<< If not a comment: double arg and add bit
+                         ]]
   >
 ]
 
-Cells: 0 0 opcode type _ *0 arg _
-<<<.>.>>>.
+Cells: 0 0 0 opcode type _ *0 0 arg
+<<<.>.>>>>.
 
 Interspersed values:
   inst_op
