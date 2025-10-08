@@ -1,48 +1,56 @@
-[ Copyright (c) 2021 Andrew Archibald                                 ]
+[ ==========  wsbf - Whitespace interpreter in Brainfuck  =========== ]
+[                                                                     ]
+[ Copyright (c) 2021, 2025 Thalia Archibald                           ]
 [                                                                     ]
 [ This Source Code Form is subject to the terms of the Mozilla Public ]
 [ License, v. 2.0. If a copy of the MPL was not distributed with this ]
 [ file, You can obtain one at https://mozilla.org/MPL/2.0/.           ]
 
-Encode instructions in trinary with leading 1:
-char acc triple_flag
+Read opcode until NUL and encode it in ternary with leading 1
+Cells: *char=0 ternary=0 last_valid=0
 >+>+<<,[
-  >>[-<[->+++<]>[-<+>]]+<< Triple acc if last char valid
-                   --------- T 0
-                      [->++< L 2
-  [---------------------->-< S 1
-                  [[-]>>-<-< Bad char
-                         ]]]
+  >>[-<[->+++<]>[-<+>]]+<< Triple ternary if last char valid
+                      char digit
+                ---------T     0
+                       [-L >++<2
+  [----------------------S  >-<1
+                  [[-]else   >-0 >-<<last_valid=0
+                       ]]]
   ,
 ]
+>>[-]<
 
-                                           id b10 base3 tok  inst
-                         ------------->+<  1  13  111   SS   push n
-                       [-------------->+<  2  27  1000  TTT  retrieve
-                                    [->+<  3  28  1001  TTS  store
-                            [--------->+<  4  37  1101  STS  copy n
-                                    [->+<  5  38  1102  STL  slide n
-                                 [---->+<  6  42  1120  SLT  swap
-                                    [->+<  7  43  1121  SLS  dup
-                                    [->+<  8  44  1122  SLL  drop
-                                    [->+<  9  45  1200  LTT  jn l
-                                    [->+<  10 46  1201  LTS  jz l
-                                    [->+<  11 47  1202  LTL  ret
-                                    [->+<  12 48  1210  LST  call l
-                                    [->+<  13 49  1211  LSS  label l
-                                    [->+<  14 50  1212  LSL  jmp l
-                                  [--->+<  15 53  1222  LLL  end
-[------------------------------------->+<  16 90  10100 TSTT mod
-                                    [->+<  17 91  10101 TSTS div
-                                   [-->+<  18 93  10110 TSST sub
-                                    [->+<  19 94  10111 TSSS add
-                                    [->+<  20 95  10112 TSSL mul
-                                 [---->+<  21 99  10200 TLTT readi
-                                    [->+<  22 100 10201 TLTS readc
-                                   [-->+<  23 102 10210 TLST printi
-                                    [->+<  24 103 10211 TLSS printc
-                                [[-]>[-]<  0
+Map from ternary to opcode ID and argument type
+Cells: 0 *ternary id=0 arg_type=0
+                                  base10   id    arg    inst     toks base3
+                         -------------13  >+1   >+<1 <  push n   SS   111
+                       [--------------27  >+2   >-<0 <  retrieve TTT  1000
+                                    [-28  >+3      0 <  store    TTS  1001
+                            [---------37  >+4   >+<1 <  copy n   STS  1101
+                                    [-38  >+5      1 <  slide n  STL  1102
+                                 [----42  >+6   >-<0 <  swap     SLT  1120
+                                    [-43  >+7      0 <  dup      SLS  1121
+                                    [-44  >+8      0 <  drop     SLL  1122
+                                    [-45  >+9  >++<2 <  jn l     LTT  1200
+                                    [-46  >+10     2 <  jz l     LTS  1201
+                                    [-47  >+11 >--<0 <  ret      LTL  1202
+                                    [-48  >+12 >++<2 <  call l   LST  1210
+                                    [-49  >+13     2 <  label l  LSS  1211
+                                    [-50  >+14     2 <  jmp l    LSL  1212
+                                  [---53  >+15 >--<0 <  end      LLL  1222
+[-------------------------------------90  >+16     0 <  mod      TSTT 10100
+                                    [-91  >+17     0 <  div      TSTS 10101
+                                   [--93  >+18     0 <  sub      TSST 10110
+                                    [-94  >+19     0 <  add      TSSS 10111
+                                    [-95  >+20     0 <  mul      TSSL 10112
+                                 [----99  >+21     0 <  readi    TLTT 10200
+                                    [-100 >+22     0 <  readc    TLTS 10201
+                                   [--102 >+23     0 <  printi   TLST 10210
+                                    [-103 >+24     0 <  printc   TLSS 10211
+                                 [[-]else >[-]0    0 <  invalid
                  ]]]]]]]]]]]]]]]]]]]]]]]]
+
+>.>.
 
 Interspersed values:
   inst_op
