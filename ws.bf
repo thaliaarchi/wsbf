@@ -51,8 +51,26 @@ Cells: 0 *ternary opcode=0 type=0
                                     [-103 >+24    0 <   printc   TLSS 10211
                                  [[-]else >[-]0   0 <   invalid
                  ]]]]]]]]]]]]]]]]]]]]]]]]
+>>>>
 
->.>.
+Read unsigned argument until LF
+Cells: 0 0 opcode type char=0 *continue=0 arg=0 mul=0
++[-
+  <,
+                       char cont arg mul
+                        EOF    0   0   0
+               [----------L    0   0   0
+                        [
+  >>>[-<[->++<]>[-<+>]]<<< Double arg if the last char was a token
+                         +T  >+1 >+1 >+1 <<<
+  [-----------------------S   >1 >-0   1 <<
+                   [[-]else   >1  >0 >-0 <<<
+                       ]]]]
+  >
+]
+
+Cells: 0 0 opcode type _ *0 arg _
+<<<.>.>>>.
 
 Interspersed values:
   inst_op
