@@ -69,33 +69,33 @@ Cells: opcode 0 *type 0
                          ]]]]
     >
   ]
-  >>>
+  >>>>>
 
   Read unsigned bits until LF
-  Cells: opcode 0 0 neg char=0 *continue=0 bit=0 arg=0
+  Cells: opcode 0 0 neg arg=0 bit=0 char=0 *continue=0
   +[-
     <,
-                         char cont bit
-                          EOF    0
-                 [----------L    0
-                          [+T  >+1 >+1 <<
-    [-----------------------S   >1 >-0 <<
-                     [[-]else   >1 >-c <<
+                         char  bit cont
+                          EOF         0
+                 [----------L         0
+                          [+T <+>1 >+<1
+    [-----------------------S <->0    1
+                     [[-]else <->c    1
                            ]]
-    >>+[->[-<++>]<[->+<]]<< If not a comment: double arg and add bit
+    <+[-<[->++<]>[-<+>]]> If not a comment: double arg and add bit
                            ]]
     >
   ]
-  <<
+  <<<<
 
   Negate argument if negative
-  Cells: opcode 0 0 *neg 0 0 0 arg
-  [->>>>[-<+>]<[->-<]<<<]
+  Cells: opcode 0 0 *neg arg 0 0 0
+  [->[-<+>]<[->-<]]
   <
 ]
 
-Cells: opcode 0 *0 0 0 0 0 arg
-<<.>>>>>>>.
+Cells: opcode 0 *0 0 arg 0 0 0
+<<.>>>>.
 
 Interspersed values:
   inst_op
