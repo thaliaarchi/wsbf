@@ -6,24 +6,24 @@
 [ License, v. 2.0. If a copy of the MPL was not distributed with this ]
 [ file, You can obtain one at https://mozilla.org/MPL/2.0/.           ]
 
->>+<<
+>+>>
 
 Read opcode until NUL and encode it in ternary with leading 1
-Cells: *char=0 digit=0 ternary=1
+Cells: 0 ternary=1 digit=0 *char=0
 ,[
-                      char digit
-                ---------T     0
-                       [-L  >++2 <
-  [----------------------S   >-1 <
-                  [[-]else  >--c <
+                      char  digit
+                ---------T      0
+                       [-L  <++>2
+  [----------------------S   <->1
+                  [[-]else  <-->c
                        ]]]
-  >+[->[-<+++>]<[->+<]]< If not a comment: triple ternary and add digit
+  <+[-<[->+++<]>[-<+>]]> If not a comment: triple ternary and add digit
   ,
 ]
->>
+<<
 
 Map from ternary to opcode and argument type
-Cells: 0 opcode=0 *ternary type=0
+Cells: opcode=0 *ternary type=0 0
                                  ternary    op   type  (inst     toks base3)
                          -------------13  <+>1  >++<2  (push n   SS   111)
                        [--------------27  <+>2  >--<0  (retrieve TTT  1000)
@@ -54,10 +54,10 @@ Cells: 0 opcode=0 *ternary type=0
 >
 
 Read argument
-Cells: 0 opcode 0 *type
+Cells: opcode 0 *type 0
 [
   Read sign if signed
-  Cells: 0 opcode char=0 *continue=type neg=0
+  Cells: opcode char=0 *continue=type neg=0
   -[-
     <,
                          char cont neg
@@ -72,7 +72,7 @@ Cells: 0 opcode 0 *type
   >>>
 
   Read unsigned bits until LF
-  Cells: 0 opcode 0 0 neg char=0 *continue=0 bit=0 arg=0
+  Cells: opcode 0 0 neg char=0 *continue=0 bit=0 arg=0
   +[-
     <,
                          char cont bit
@@ -89,12 +89,12 @@ Cells: 0 opcode 0 *type
   <<
 
   Negate argument if negative
-  Cells: 0 opcode 0 0 *neg 0 0 0 arg
+  Cells: opcode 0 0 *neg 0 0 0 arg
   [->>>>[-<+>]<[->-<]<<<]
   <
 ]
 
-Cells: 0 opcode 0 *0 0 0 0 0 arg
+Cells: opcode 0 *0 0 0 0 0 arg
 <<.>>>>>>>.
 
 Interspersed values:
